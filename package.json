@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "load": "node load-data.js",
+    "start": "node api.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +17,8 @@
     "express": "^4.15.3",
     "node-http-error": "^1.1.0",
     "pouchdb": "6.2.0",
-    "ramda": "^0.24.1"
+    "pouchdb-adapter-http": "^6.4.3",
+    "ramda": "^0.24.1",
+    "slugify": "^1.2.9"
   }
 }
