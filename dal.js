@@ -4,17 +4,12 @@ PouchDB.plugin(require('pouchdb-adapter-http'))
 const HTTPError = require('node-http-error')
 const { tail, head, replace } = require('ramda')
 const slugify = require('slugify')
+const pkGen = require('./lib/pk-generator')
 
 const db = new PouchDB(process.env.COUCHDB_URL)
 
 const addArt = artwork => {
-  console.log('OUR ARTWORK OBJECT: ', artwork)
-  //const newArt = artwork.name.replace(/^The\s|A\s/i, ' ')
-  //console.log('FIRST NEWART ENTRY: ', newArt)
-  artwork._id = `${artwork.type}_${slugify(artwork.name, {
-    lower: true
-  })}`
-  console.log('After _id', artwork.name)
+  artwork._id = pkGen(artwork)
   return addDoc(artwork)
 }
 
