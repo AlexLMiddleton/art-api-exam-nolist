@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 const HTTPError = require('node-http-error')
 const bodyParser = require('body-parser')
-const reqFieldChecker = require('./lib/check-req-fields')
+const reqFieldChecker = require('./lib/check-required-fields')
 const objClean = require('./lib/clean-object')
 const {
   isEmpty,
@@ -191,21 +191,63 @@ app.delete('/artists/:id', (req, res, next) => {
 
 //////////////////////////////////
 //////// FILTER PAINTINGS -- NEEDS TO BE COMMENTED OUT TO RUN THE LIST ALL PAINTINGS FUNCTION
-//////////////////////////////////
+// //////////////////////////////////
+app.get('/paintings', (req, res, next) => {
+  var query = {}
+  if (pathOr(null, ['query', 'filter'], req)) {
+    const propKey = head(split(':', req.query.filter))
+
+    const propValue = last(split(':', req.query.filter))
+
+    const newPropValue = isNaN(propValue) ? propValue : Number(propValue)
+
+    var selectorStuff = {}
+    selectorStuff[propKey] = newPropValue
+
+    var userNum = Number(req.query.limit)
+
+    query = {
+      selector: selectorStuff,
+      limit: userNum || 25 // Default number of CouchDB's returned docs is 25
+    }
+  } else {
+    query = {
+      selector: { type: 'painting' }
+    }
+  }
+
+  findDocs(query)
+    .then(docs => res.send(docs))
+    .catch(err => next(new HTTPError(err.status, err.message, err)))
+})
+
 // app.get('/paintings', (req, res, next) => {
 //   var query = {}
-//   if (pathOr(null, ['query', 'filter'], req)) {
-//     const propKey = head(split(':', req.query.filter))
-//     const propValue = last(split(':', req.query.filter))
+//   var userNum = Number(req.query.limit)
+//   // if (pathOr(null, ['query', 'limit'], req)) {
+//   //   console.log('userNum: ', userNum)
+//   //   allDocs({
+//   //     startkey: 'painting_',
+//   //     endkey: 'painting_\ufff0',
+//   //     include_docs: true,
+//   //     limit: userNum || 5
+//   //   })
+//   //     .then(docs => res.status(200).send(docs))
+//   //     .catch(err => next(new HTTPError(err.status, err.message, err)))
+//   // }
 //
+//   if (pathOr(null, ['query', 'filter'], req)) {
+//     console.log('req.query.filter:     ', req.query.filter)
+//     const propKey = head(split(':', req.query.filter))
+//     console.log('PROPKEY:   ', propKey)
+//     const propValue = last(split(':', req.query.filter))
+//     console.log('PROPVALUE:   ', propValue)
+//     const newPropValue = isNaN(propValue) ? propValue : Number(propValue)
 //     var selectorStuff = {}
-//     selectorStuff[propKey] = propValue
+//     selectorStuff[propKey] = newPropValue
 //     console.log('selectorStuff', selectorStuff)
 //
 //     console.log('req.query', req.query)
-//
-//     var userNum = Number(req.query.limit)
-//     console.log('userNum', userNum)
 //
 //     query = {
 //       selector: selectorStuff,
@@ -225,17 +267,17 @@ app.delete('/artists/:id', (req, res, next) => {
 //////////////////////////////////
 //////// LIST ALL PAINTINGS -- NEEDS TO BE COMMENTED OUT TO RUN THE FILTER PAINTINGS FUNCTION
 //////////////////////////////////
-app.get('/paintings', (req, res, next) => {
-  var userNum = Number(req.query.limit)
-  allDocs({
-    startkey: 'painting_',
-    endkey: 'painting_\ufff0',
-    include_docs: true,
-    limit: userNum || 5
-  })
-    .then(docs => res.status(200).send(docs))
-    .catch(err => next(new HTTPError(err.status, err.message, err)))
-})
+// app.get('/paintings', (req, res, next) => {
+//   var userNum = Number(req.query.limit)
+//   allDocs({
+//     startkey: 'painting_',
+//     endkey: 'painting_\ufff0',
+//     include_docs: true,
+//     limit: userNum || 5
+//   })
+//     .then(docs => res.status(200).send(docs))
+//     .catch(err => next(new HTTPError(err.status, err.message, err)))
+// })
 
 ////////////////////////////////////
 ////////// LIST ALL ARTISTS
