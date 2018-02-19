@@ -5,8 +5,25 @@ const HTTPError = require('node-http-error')
 const bodyParser = require('body-parser')
 const reqFieldChecker = require('./lib/check-req-fields')
 const objClean = require('./lib/clean-object')
-const { isEmpty, prop, not, join } = require('ramda')
-const { addArt, getArt, updateArt, deleteArt } = require('./dal')
+const {
+  isEmpty,
+  prop,
+  not,
+  join,
+  pathOr,
+  head,
+  last,
+  split,
+  number
+} = require('ramda')
+const {
+  addArt,
+  getArt,
+  updateArt,
+  deleteArt,
+  allDocs,
+  findDocs
+} = require('./dal')
 
 const putArtworkReqFieldChecker = reqFieldChecker([
   '_id',
@@ -169,6 +186,63 @@ app.delete('/paintings/:id', (req, res, next) => {
 app.delete('/artists/:id', (req, res, next) => {
   deleteArt(req.params.id)
     .then(deletedArt => res.status(200).send(deletedArt))
+    .catch(err => next(new HTTPError(err.status, err.message, err)))
+})
+
+//////////////////////////////////
+//////// FILTER PAINTINGS -- NEEDS TO BE COMMENTED OUT TO RUN THE LIST ALL PAINTINGS FUNCTION
+//////////////////////////////////
+// app.get('/paintings', (req, res, next) => {
+//   var query = {}
+//   if (pathOr(null, ['query', 'filter'], req)) {
+//     const propKey = head(split(':', req.query.filter))
+//     const propValue = last(split(':', req.query.filter))
+//
+//     var selectorStuff = {}
+//     selectorStuff[propKey] = propValue
+//     console.log('selectorStuff', selectorStuff)
+//
+//     console.log('req.query', req.query)
+//
+//     var userNum = Number(req.query.limit)
+//     console.log('userNum', userNum)
+//
+//     query = {
+//       selector: selectorStuff,
+//       limit: userNum || 25 // Default number of CouchDB's returned docs is 25
+//     }
+//   } else {
+//     query = {
+//       selector: { type: 'painting' }
+//     }
+//   }
+//
+//   findDocs(query)
+//     .then(docs => res.send(docs))
+//     .catch(err => next(new HTTPError(err.status, err.message, err)))
+// })
+
+//////////////////////////////////
+//////// LIST ALL PAINTINGS -- NEEDS TO BE COMMENTED OUT TO RUN THE FILTER PAINTINGS FUNCTION
+//////////////////////////////////
+app.get('/paintings', (req, res, next) => {
+  var userNum = Number(req.query.limit)
+  allDocs({
+    startkey: 'painting_',
+    endkey: 'painting_\ufff0',
+    include_docs: true,
+    limit: userNum || 5
+  })
+    .then(docs => res.status(200).send(docs))
+    .catch(err => next(new HTTPError(err.status, err.message, err)))
+})
+
+////////////////////////////////////
+////////// LIST ALL ARTISTS
+////////////////////////////////////
+app.get('/artists', (req, res, next) => {
+  allDocs({ startkey: 'artist_', include_docs: true, limit: 3 })
+    .then(docs => res.status(200).send(docs))
     .catch(err => next(new HTTPError(err.status, err.message, err)))
 })
 

@@ -1,4 +1,14 @@
 # Getting Started
+
+| **Getting Started** | **Basics Documentation** |
+|-----------------|----------------------|
+|[Create a Database](#create-a-database)|[Base URL](#base-url)
+|[Clone your repo](#clone-your-repo)|[Scheme](#scheme)
+|[Install dependencies](#install-dependencies)|[HTTP Verbs](#http-verbs)
+|[Establish environment variables](#establish-environment-variables)|[Content Types](#content-types)
+|[Load your data](#load-your-data)|[Response Status Codes](#response-status-codes)
+|[Start the API](#start-the-api)
+|[Make your first GET call](#make-your-first-get-call-within-the-browser)
 ## Create a database
 Database creation is simple, assuming you already have a Roo account.  To create your database, simply open your Terminal window and type `roo db add <database name>`.  For example:
 ```
@@ -65,7 +75,8 @@ When you've finished adding your initial data, save the file and run `npm run lo
 
 ## Start the API
 Finally, to start the API, type `npm start` into your Terminal.  You should see a message that says "App is now listening on port 4000."
-## Make your first `GET` call within the browser
+
+## Make your first GET call within the browser
 Once your server is running, open your browser and navigate to `http://localhost:4000/`.  You should see a message that says 'Welcome to the Art API. Manage all the paintings for much win.'  Congratulations!  You've just run your first `GET`!
 
 ## Basics

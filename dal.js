@@ -1,8 +1,9 @@
 require('dotenv').config()
 const PouchDB = require('pouchdb')
 PouchDB.plugin(require('pouchdb-adapter-http'))
+PouchDB.plugin(require('pouchdb-find'))
 const HTTPError = require('node-http-error')
-const { tail, head, replace } = require('ramda')
+const { tail, head, replace, pluck } = require('ramda')
 const slugify = require('slugify')
 const pkGen = require('./lib/pk-generator')
 
@@ -24,4 +25,9 @@ const deleteArt = artwork =>
 
 const addDoc = doc => db.put(doc)
 
-module.exports = { addArt, getArt, updateArt, deleteArt }
+const allDocs = options =>
+  db.allDocs(options).then(docs => pluck('doc', docs.rows))
+
+const findDocs = query => db.find(query).then(result => result.docs)
+
+module.exports = { addArt, getArt, updateArt, deleteArt, allDocs, findDocs }
