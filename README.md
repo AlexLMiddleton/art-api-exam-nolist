@@ -2,7 +2,7 @@
 
 | **Getting Started** | **Basics Documentation** |
 |-----------------|----------------------|
-|[Create a Database](#create-a-database)|[Base URL](#base-url)
+|[Create a database](#create-a-database)|[Base URL](#base-url)
 |[Clone your repo](#clone-your-repo)|[Scheme](#scheme)
 |[Install dependencies](#install-dependencies)|[HTTP Verbs](#http-verbs)
 |[Establish environment variables](#establish-environment-variables)|[Content Types](#content-types)
