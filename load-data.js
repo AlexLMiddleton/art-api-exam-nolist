@@ -63,6 +63,33 @@ db
       artist: 'Pierre-Auguste Renoires',
       yearCreated: 1876,
       museum: { name: 'Musée d’Orsay', location: 'Paris' }
+    },
+    {
+      _id: 'artist_claude-monet',
+      name: 'Claude Monet',
+      country: 'France',
+      birth: '1840',
+      death: '1926',
+      type: 'artist',
+      _rev: '1-ad1bb2a59a964b9a9d485a96cb29adad'
+    },
+    {
+      _id: 'artist_bob-ross',
+      name: 'Bob Ross',
+      country: 'United States',
+      birth: '1953',
+      death: '2010',
+      type: 'artist',
+      _rev: '1-edc15892fede4738b384322a81948194'
+    },
+    {
+      _id: 'artist_vincent-van-gogh',
+      name: 'Vincent van Gogh',
+      country: 'Netherlands',
+      birth: '1853',
+      death: '1890',
+      type: 'artist',
+      _rev: '1-801fd4eee7de46c393a1a42deecedbdb'
     }
   ])
   .then(result => console.log('Documents successfully uploaded!', result))
